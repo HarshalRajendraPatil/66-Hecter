@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import CustomError from "../utils/customError.js";
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
@@ -25,7 +26,7 @@ const errorHandler = (err, req, res, next) => {
   // Handling the error for resource not found
   if (err.name === "CastError") {
     const message = `Resource not found ${err.value}`;
-    err = new ErrorResponse(message, 404);
+    err = new CustomError(message, 404);
   }
 
   // Handle Mongoose duplicate key error
