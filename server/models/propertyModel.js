@@ -115,6 +115,20 @@ const propertySchema = new Schema(
         },
       ],
     },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
     listingDetails: {
       listedBy: {
         type: mongoose.Schema.Types.ObjectId,

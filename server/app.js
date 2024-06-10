@@ -6,6 +6,7 @@ import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import isLoggedIn from "./middlewares/isLogedInMiddleware.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import fileUpload from "express-fileupload";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api", propertyRoutes);
+app.use("/api", reviewRoutes);
 
 app.use(errorHandler);
 
