@@ -63,6 +63,12 @@ const userSchema = new Schema(
         ref: "Review",
       },
     ],
+    notifications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification",
+      },
+    ],
   },
   {
     timestamps: true,

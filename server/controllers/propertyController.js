@@ -4,6 +4,7 @@ import catchAsync from "../utils/catchAsync.js";
 import CustomError from "../utils/customError.js";
 import cloudinary from "../service/cloudinary.js";
 import provideFilteredProperties from "../service/provideFilteredProperties.js";
+import createNotificationForUpdates from "../service/createNotification.js";
 
 // Create a new property
 const createProperty = catchAsync(async (req, res, next) => {
@@ -19,6 +20,13 @@ const createProperty = catchAsync(async (req, res, next) => {
   props.contactDetails.contactEmail = req.user.email;
 
   const property = await Property.create(props);
+
+  const type = "new_property";
+  const message = "Added a new property. Check it out.";
+  const allUsers = await User.find();
+  allUsers.forEach(async (user) => {
+    await createNotificationForUpdates(user, type, message);
+  });
 
   res.status(201).json({
     status: "success",
@@ -59,6 +67,15 @@ const updateProperty = catchAsync(async (req, res, next) => {
   if (!property) {
     return next(new CustomError("No property found with that ID", 404));
   }
+
+  const type = "property_update";
+  const message = "Property in your favourites has been updated. Check it out.";
+  const allUsers = await User.find();
+  allUsers.forEach(async (user) => {
+    if (user.favorites.includes(req.params.id)) {
+      await createNotificationForUpdates(user, type, message);
+    }
+  });
 
   res.status(200).json({
     status: "success",
