@@ -5,6 +5,7 @@ import CustomError from "../utils/customError.js";
 import cloudinary from "../service/cloudinary.js";
 import provideFilteredProperties from "../service/provideFilteredProperties.js";
 import createNotificationForUpdates from "../service/createNotification.js";
+import sendEmails from "../service/sendEmails.js";
 
 // Create a new property
 const createProperty = catchAsync(async (req, res, next) => {
@@ -26,6 +27,7 @@ const createProperty = catchAsync(async (req, res, next) => {
   const allUsers = await User.find();
   allUsers.forEach(async (user) => {
     await createNotificationForUpdates(user, type, message);
+    sendEmails(user.email, "New Property Added", message);
   });
 
   res.status(201).json({
@@ -69,11 +71,13 @@ const updateProperty = catchAsync(async (req, res, next) => {
   }
 
   const type = "property_update";
-  const message = "Property in your favourites has been updated. Check it out.";
+  const message =
+    "Property in your favourites has been updated. Check what's new.";
   const allUsers = await User.find();
   allUsers.forEach(async (user) => {
     if (user.favorites.includes(req.params.id)) {
       await createNotificationForUpdates(user, type, message);
+      sendEmails(user.email, "Property Updated", message);
     }
   });
 

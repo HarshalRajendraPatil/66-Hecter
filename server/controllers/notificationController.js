@@ -75,7 +75,7 @@ const deleteNotification = catchAsync(async (req, res, next) => {
     );
   }
 
-  await notification.remove();
+  await notification.deleteOne();
 
   res.status(204).json({
     status: "success",

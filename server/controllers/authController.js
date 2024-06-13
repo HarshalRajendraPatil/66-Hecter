@@ -8,7 +8,7 @@ import randomString from "randomstring";
 import CustomError from "../utils/customError.js";
 import User from "../models/UserModel.js";
 import getTokenAndResponse from "../utils/generateTokenAndResponse.js";
-import setResetPasswordMail from "../service/sendResetPasswordMail.js";
+import setResetPasswordMail from "../utils/sendResetPasswordMail.js";
 
 // Global variable for storing id and token for forgot-password acc
 let global = {

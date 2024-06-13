@@ -4,6 +4,7 @@ import Review from "../models/reviewModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import CustomError from "../utils/customError.js";
 import createNotificationForUpdates from "../service/createNotification.js";
+import sendEmails from "../service/sendEmails.js";
 
 // Add a review to the property
 const addReview = catchAsync(async (req, res, next) => {
@@ -34,9 +35,10 @@ const addReview = catchAsync(async (req, res, next) => {
   const propertyOwner = await User.findById(property.listingDetails.listedBy);
   const type = "review";
   const message =
-    "A new review has be added to your listed property. Check it out.";
+    "A new review has be added to your listed property. Read it now.";
 
   await createNotificationForUpdates(propertyOwner, type, message);
+  sendEmails(propertyOwner.email, "New Review Added", message);
 
   res.status(201).json({
     status: "success",
