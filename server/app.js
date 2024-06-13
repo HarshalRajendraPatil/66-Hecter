@@ -9,6 +9,7 @@ import propertyRoutes from "./routes/propertyRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import fileUpload from "express-fileupload";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import comparisonRoutes from "./routes/comparisonRoutes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", propertyRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api", notificationRoutes);
+app.use("/api", comparisonRoutes);
 
 app.use(errorHandler);
 
