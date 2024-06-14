@@ -10,7 +10,7 @@ const notificationSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ["new_property", "property_update", "review"],
+      enum: ["new_property", "property_update", "review", "property_booked"],
       required: true,
     },
     message: {

@@ -69,6 +69,12 @@ const userSchema = new Schema(
         ref: "Notification",
       },
     ],
+    bookings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+      },
+    ],
   },
   {
     timestamps: true,

@@ -1,14 +1,14 @@
 import express from "express";
 import isLoggedIn from "../middlewares/isLogedInMiddleware.js";
 import {
-  addToComparisonList,
+  addAndRemoveFromComparisonList,
   getComparisonList,
 } from "../controllers/comparisonController.js";
 
 const router = express.Router();
 
-router.post("/comparison/:propertyId", isLoggedIn, addToComparisonList);
+router.post("/:propertyId", isLoggedIn, addAndRemoveFromComparisonList);
 
-router.get("/comparison", isLoggedIn, getComparisonList);
+router.get("/", isLoggedIn, getComparisonList);
 
 export default router;

@@ -26,6 +26,9 @@ const provideFilteredProperties = catchAsync(async (req, res) => {
   if (filters.type) {
     query.type = filters.type;
   }
+  if (filters.status) {
+    query.status = filters.status;
+  }
   if (filters.maxPrice) {
     if (!query["pricing.price"]) {
       query["pricing.price"] = {};
@@ -168,9 +171,6 @@ export default provideFilteredProperties;
 // }
 // if (filters.appliances && filters.appliances.length > 0) {
 //   query["interior.appliances"] = { $in: filters.appliances };
-// }
-// if (filters.status) {
-//   query.status = filters.status;
 // }
 // if (filters.minPrice) {
 //   query["pricing.price"] = { $gte: filters.minPrice };

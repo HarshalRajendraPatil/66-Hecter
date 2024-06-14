@@ -10,6 +10,7 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import fileUpload from "express-fileupload";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import comparisonRoutes from "./routes/comparisonRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 
 const app = express();
 
@@ -20,10 +21,11 @@ app.use(morgan("dev"));
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api", propertyRoutes);
-app.use("/api", reviewRoutes);
-app.use("/api", notificationRoutes);
-app.use("/api", comparisonRoutes);
+app.use("/api/properties", propertyRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/comparison", comparisonRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.use(errorHandler);
 

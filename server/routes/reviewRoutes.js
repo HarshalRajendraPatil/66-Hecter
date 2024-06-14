@@ -11,22 +11,18 @@ import {
 const router = express.Router();
 
 // Add a review to the property
-router.post("/properties/:propertyId/reviews", isLoggedIn, addReview);
+router.post("/properties/:propertyId", isLoggedIn, addReview);
 
 // Get all reviews for a property.
-router.get(
-  "/properties/:propertyId/reviews",
-  isLoggedIn,
-  getAllPropertyReviews
-);
+router.get("/properties/:propertyId", isLoggedIn, getAllPropertyReviews);
 
 // Get all reviews by a user
-router.get("/users/reviews", isLoggedIn, getAllReviewsByUser);
+router.get("/users", isLoggedIn, getAllReviewsByUser);
 
 // Update a review.
-router.put("/reviews/:reviewId", isLoggedIn, updateReview);
+router.put("/:reviewId", isLoggedIn, updateReview);
 
 // Delete a review.
-router.delete("/reviews/:reviewId", isLoggedIn, deleteReview);
+router.delete("/:reviewId", isLoggedIn, deleteReview);
 
 export default router;

@@ -1,7 +1,7 @@
 import catchAsync from "../utils/catchAsync.js";
 
 // Add to comparison list
-const addToComparisonList = catchAsync(async (req, res, next) => {
+const addAndRemoveFromComparisonList = catchAsync(async (req, res, next) => {
   const propertyId = req.params.propertyId;
 
   if (!req.user.comparisons.includes(propertyId)) {
@@ -32,4 +32,4 @@ const getComparisonList = catchAsync(async (req, res, next) => {
   });
 });
 
-export { addToComparisonList, getComparisonList };
+export { addAndRemoveFromComparisonList, getComparisonList };

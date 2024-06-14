@@ -12,12 +12,12 @@ const router = express.Router();
 // router.post("/notifications", isLoggedIn, createNotification);
 
 // Get all reviews for a property.
-router.get("/notifications", isLoggedIn, getMyNotifications);
+router.get("/", isLoggedIn, getMyNotifications);
 
 // Get all reviews by a user
-router.put("/notifications/:notificationId", isLoggedIn, markAsRead);
+router.put("/:notificationId", isLoggedIn, markAsRead);
 
 // Delete a review.
-router.delete("/notifications/:notificationId", isLoggedIn, deleteNotification);
+router.delete("/:notificationId", isLoggedIn, deleteNotification);
 
 export default router;
