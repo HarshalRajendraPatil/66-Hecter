@@ -48,6 +48,31 @@ const addReview = catchAsync(async (req, res, next) => {
   });
 });
 
+const getAllReviews = catchAsync(async (req, res, next) => {
+  const reviews = await Review.find().populate("user property");
+
+  res.status(200).json({
+    status: "success",
+    results: reviews.length,
+    data: {
+      reviews,
+    },
+  });
+});
+
+const getReview = catchAsync(async (req, res, next) => {
+  const review = await Review.findById(req.params.reviewId).populate(
+    "user property"
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      review,
+    },
+  });
+});
+
 // Get all reviews for a property.
 const getAllPropertyReviews = catchAsync(async (req, res, next) => {
   const property = await Property.findById(req.params.propertyId);
@@ -85,12 +110,19 @@ const getAllReviewsByUser = catchAsync(async (req, res, next) => {
 
 // Update a review.
 const updateReview = catchAsync(async (req, res, next) => {
-  const review = await Review.findByIdAndUpdate(req.params.reviewId, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const review = await Review.findById(req.params.reviewId);
 
   if (!review) return new CustomError("No review found!", 404);
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === review.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await review.updateOne(req.body, { new: true, runValidators: true });
 
   res.status(200).json({
     status: "success",
@@ -102,15 +134,22 @@ const updateReview = catchAsync(async (req, res, next) => {
 
 // Delete a review.
 const deleteReview = catchAsync(async (req, res, next) => {
-  const review = await Review.findByIdAndDelete(req.params.reviewId);
+  const review = await Review.findById(req.params.reviewId);
 
   if (!review) return new CustomError("No review found!", 404);
 
-  const property = await Property.findById(review.property).populate("reviews");
-  property.reviews = property.reviews.filter(
-    (rev) => rev._id.toString() !== req.params.reviewId.toString()
-  );
-  // property.reviews.pull(req.params.reviewId);
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === review.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await review.deleteOne();
+
+  const property = await Property.findById(review.property);
+  property.reviews.pull(req.params.reviewId);
   property.ratingsQuantity = property.reviews.length;
   property.averageRating =
     property.reviews.length > 0
@@ -120,8 +159,7 @@ const deleteReview = catchAsync(async (req, res, next) => {
   await property.save();
 
   const user = await User.findById(req.user._id);
-  user.reviews = user.reviews.filter((rev) => rev._id !== req.params.reviewId);
-  // user.reviews.pull(review);
+  user.reviews.pull(req.params.reviewId);
   await user.save();
 
   res.status(204).json({
@@ -132,6 +170,8 @@ const deleteReview = catchAsync(async (req, res, next) => {
 
 export {
   addReview,
+  getAllReviews,
+  getReview,
   getAllPropertyReviews,
   getAllReviewsByUser,
   updateReview,

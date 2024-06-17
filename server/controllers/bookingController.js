@@ -95,14 +95,21 @@ const getAllBookings = catchAsync(async (req, res, next) => {
 
 // Update a booking
 const updateBooking = catchAsync(async (req, res, next) => {
-  const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const booking = await Booking.findById(req.params.id);
 
   if (!booking) {
     return next(new CustomError("No booking found with that ID", 404));
   }
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === booking.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await booking.updateOne(req.body, { new: true, runValidators: true });
 
   if (booking.status === "canceled") {
     await Property.findByIdAndUpdate(
@@ -130,10 +137,20 @@ const updateBooking = catchAsync(async (req, res, next) => {
 
 // Delete a booking
 const deleteBooking = catchAsync(async (req, res, next) => {
-  const booking = await Booking.findByIdAndDelete(req.params.id);
+  const booking = await Booking.findById(req.params.id);
   if (!booking) {
     return next(new CustomError("No booking found with that ID", 404));
   }
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === booking.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await booking.deleteOne();
 
   req.user.bookings.pull(booking._id);
   await req.user.save();

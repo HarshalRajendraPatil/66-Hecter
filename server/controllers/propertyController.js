@@ -30,6 +30,9 @@ const createProperty = catchAsync(async (req, res, next) => {
     sendEmails(user.email, "New Property Added", message);
   });
 
+  req.user.listing.push(property._id);
+  await req.user.save();
+
   res.status(201).json({
     status: "success",
     data: {
@@ -61,14 +64,25 @@ const getPropertyById = catchAsync(async (req, res, next) => {
 
 // Update a property by ID
 const updateProperty = catchAsync(async (req, res, next) => {
-  const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const property = await Property.findById(req.params.id);
+  // const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
+  //   new: true,
+  //   runValidators: true,
+  // });
 
   if (!property) {
     return next(new CustomError("No property found with that ID", 404));
   }
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === property.listingDetails.listedBy.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await property.updateOne(req.body, { runValidators: true, new: true });
 
   const type = "property_update";
   const message =
@@ -91,11 +105,24 @@ const updateProperty = catchAsync(async (req, res, next) => {
 
 // Delete a property by ID
 const deleteProperty = catchAsync(async (req, res, next) => {
-  const property = await Property.findByIdAndDelete(req.params.id);
+  const property = await Property.findById(req.params.id);
 
   if (!property) {
     return next(new CustomError("No property found with that ID", 404));
   }
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === property.listingDetails.listedBy.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
+
+  await property.deleteOne();
+
+  req.user.listing.pull(property._id);
+  await req.user.save();
 
   res.status(204).json({
     status: "success",
@@ -171,6 +198,14 @@ const deletePropertyMedia = catchAsync(async (req, res, next) => {
   if (!property) {
     return next(new CustomError("No property found with that ID", 404));
   }
+
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === property.listingDetails.listedBy.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
 
   const mediaIndex = property.media.images.findIndex(
     (img) => img.public_id === req.params.mediaId

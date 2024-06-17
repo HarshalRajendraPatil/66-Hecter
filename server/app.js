@@ -4,13 +4,13 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
-import isLoggedIn from "./middlewares/isLogedInMiddleware.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import fileUpload from "express-fileupload";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import comparisonRoutes from "./routes/comparisonRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -21,6 +21,7 @@ app.use(morgan("dev"));
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/notifications", notificationRoutes);

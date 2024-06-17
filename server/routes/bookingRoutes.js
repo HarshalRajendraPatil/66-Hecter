@@ -8,12 +8,13 @@ import {
   updateBooking,
   deleteBooking,
 } from "../controllers/bookingController.js";
+import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
 router.post("/:propertyId", isLoggedIn, createBooking);
 
-router.get("/", isLoggedIn, getAllBookings);
+router.get("/", isLoggedIn, adminMiddleware, getAllBookings);
 
 router.get("/:id", isLoggedIn, getBooking);
 

@@ -18,6 +18,19 @@ import CustomError from "../utils/customError.js";
 //   });
 // });
 
+// Get all notifications
+const getAllNotifications = catchAsync(async (req, res, next) => {
+  const notifications = await Notification.find();
+
+  res.status(200).json({
+    status: "success",
+    results: notifications.length,
+    data: {
+      notifications,
+    },
+  });
+});
+
 // Get all notifications for the logged-in user
 const getMyNotifications = catchAsync(async (req, res, next) => {
   const notifications = await Notification.find({ user: req.user._id });
@@ -38,14 +51,13 @@ const markAsRead = catchAsync(async (req, res, next) => {
     return next(new CustomError("No notification found with that ID", 404));
   }
 
-  if (notification.user.toString() !== req.user._id.toString()) {
-    return next(
-      new CustomError(
-        "You do not have permission to mark this notification as read",
-        403
-      )
-    );
-  }
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === notification.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
 
   notification.read = true;
   await notification.save();
@@ -66,14 +78,13 @@ const deleteNotification = catchAsync(async (req, res, next) => {
     return next(new CustomError("No notification found with that ID", 404));
   }
 
-  if (notification.user.toString() !== req.user._id.toString()) {
-    return next(
-      new CustomError(
-        "You do not have permission to delete this notification",
-        403
-      )
-    );
-  }
+  if (
+    !(
+      req.user.role === "admin" ||
+      req.user._id.toString() === notification.user.toString()
+    )
+  )
+    return next(new CustomError("Permission denied!", 403));
 
   await notification.deleteOne();
 
@@ -85,6 +96,7 @@ const deleteNotification = catchAsync(async (req, res, next) => {
 
 export {
   // createNotification,
+  getAllNotifications,
   getMyNotifications,
   markAsRead,
   deleteNotification,
