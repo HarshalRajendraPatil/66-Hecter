@@ -107,6 +107,9 @@ const provideFilteredProperties = catchAsync(async (req, res) => {
     }
     query["additionalDetails.hoaFees"].$lte = filters.maxHoaFees;
   }
+  if (filters.transactionType) {
+    query.transactionType = filters.transactionType;
+  }
 
   const properties = await Property.find(query)
     .skip(propertiesToSkip)

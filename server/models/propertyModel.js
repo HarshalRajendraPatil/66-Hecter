@@ -22,6 +22,11 @@ const propertySchema = new Schema(
       enum: ["Available", "Sold", "Pending"],
       default: "Available",
     },
+    transactionType: {
+      type: String,
+      enum: ["Buy", "Rent"],
+      required: [true, "Transaction Type is required"],
+    },
     location: {
       address: {
         type: String,
@@ -50,7 +55,9 @@ const propertySchema = new Schema(
     pricing: {
       price: {
         type: Number,
-        required: [true, "Price is required"],
+        required: function () {
+          return this.transactionType === "Buy";
+        },
       },
       currency: {
         type: String,
@@ -58,6 +65,25 @@ const propertySchema = new Schema(
       },
       pricePerUnit: Number,
       taxes: Number,
+      rent: {
+        type: Number,
+        required: function () {
+          return this.transactionType === "Rent";
+        },
+      },
+      rentFrequency: {
+        type: String,
+        enum: ["Daily", "Weekly", "Monthly", "Yearly"],
+        required: function () {
+          return this.transactionType === "Rent";
+        },
+      },
+      securityDeposit: {
+        type: Number,
+        required: function () {
+          return this.transactionType === "Rent";
+        },
+      },
     },
     features: {
       bedrooms: Number,

@@ -21,7 +21,7 @@ router.post("/register", register);
 router.post("/login", login);
 
 // Route for POST request on "/forgot-password" link
-router.post("/password-reset", isLoggedIn, forgotPassword);
+router.post("/password-reset", forgotPassword);
 
 // Route for POST request on "/reset-password" link
 router.post("/password-reset/:token", isLoggedIn, resetPassword);

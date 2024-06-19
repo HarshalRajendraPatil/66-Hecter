@@ -6,8 +6,7 @@ const sendResetPasswordMail = catchAsync(async function (
   name,
   email,
   token,
-  next,
-  res
+  next
 ) {
   // Setting up the mail which will send the email
   const transporter = nodeMailer.createTransport({
@@ -24,12 +23,12 @@ const sendResetPasswordMail = catchAsync(async function (
   // Setting up the content of the email
   const mailOption = {
     from: {
-      name: "ToonDig",
+      name: "66Hector",
       address: process.env.EMAIL,
     },
     to: email,
     subject: "Reset Password",
-    html: `<p>Hi ${name}, please copy the link and <a href="http://localhost:3000/api/auth/password-reset/${token}">reset your password</a></p>`,
+    html: `<p>Hi ${name}, please copy the link and <a href="${process.env.FRONTEND_URL}/reset-password/${token}">reset your password</a></p>`,
   };
 
   // Sending the mail to the given email
@@ -40,13 +39,6 @@ const sendResetPasswordMail = catchAsync(async function (
         new CustomError("Failed to send the mail. Try again later", 500)
       );
     }
-  });
-
-  // Sending the response back to the user
-  res.status(200).json({
-    status: "success",
-    message: `A link to reset you password has been send to ${email}.`,
-    token,
   });
 });
 
