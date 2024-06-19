@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+      className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
       <ToastContainer
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
           </h2>
         </div>
         <form className="mt-8 space-y-3" onSubmit={onSubmit}>
-          <div className="rounded-full shadow-sm -space-y-px flex flex-col gap-2">
+          <div className="shadow-sm -space-y-px flex flex-col gap-2">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email address
@@ -66,7 +66,7 @@ const ForgotPassword = () => {
                 required
                 value={email}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 style={{ color: "#343A40" }}
               />

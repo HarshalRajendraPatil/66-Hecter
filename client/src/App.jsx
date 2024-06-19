@@ -6,18 +6,22 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import axios from "axios";
 import ForgotPassword from "./pages/ForgotPassword";
+import AppLayout from "./AppLayout";
 
 const App = () => {
   axios.defaults.withCredentials = true;
   axios.defaults.baseURL = "http://localhost:3001/api";
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -3,8 +3,11 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -21,8 +24,9 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      await axios.post("/auth/login", formData);
+      const res = await axios.post("/auth/login", formData);
       toast.success("Login successful!");
+      dispatch(setUser(res.data.user));
       navigate("/");
     } catch (err) {
       toast.error(err.response.data.message);
@@ -31,7 +35,7 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+      className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
       <ToastContainer
@@ -46,10 +50,10 @@ const Login = () => {
         draggable
         pauseOnHover
       />
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full space-y-6">
         <div>
           <h2
-            className="mt-6 text-center text-3xl font-extrabold text-gray-900"
+            className="text-center text-3xl font-extrabold text-gray-900"
             style={{ color: "#343A40" }}
           >
             Login to your Account
@@ -69,7 +73,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 style={{ color: "#343A40" }}
               />
@@ -86,7 +90,7 @@ const Login = () => {
                 required
                 value={passwordHash}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 style={{ color: "#343A40" }}
               />
@@ -104,7 +108,7 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-bold rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               style={{ backgroundColor: "#FFC107" }}
             >
               Login

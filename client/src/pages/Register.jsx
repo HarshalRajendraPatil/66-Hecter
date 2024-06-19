@@ -34,7 +34,7 @@ const Register = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+      className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
       <ToastContainer
@@ -49,7 +49,7 @@ const Register = () => {
         draggable
         pauseOnHover
       />
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full space-y-6">
         <div>
           <h2
             className="mt-6 text-center text-3xl font-extrabold text-gray-900"
@@ -59,7 +59,7 @@ const Register = () => {
           </h2>
         </div>
         <form className="mt-8 space-y-3" onSubmit={onSubmit}>
-          <div className="rounded-full shadow-sm -space-y-px flex flex-col gap-2">
+          <div className="shadow-sm -space-y-px flex flex-col gap-2">
             <div>
               <label htmlFor="name" className="sr-only">
                 Name
@@ -72,7 +72,7 @@ const Register = () => {
                 required
                 value={name}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Name"
                 style={{ color: "#343A40" }}
               />
@@ -89,7 +89,7 @@ const Register = () => {
                 required
                 value={email}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 style={{ color: "#343A40" }}
               />
@@ -106,7 +106,7 @@ const Register = () => {
                 required
                 value={address}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Address"
                 style={{ color: "#343A40" }}
               />
@@ -123,7 +123,7 @@ const Register = () => {
                 required
                 value={phone}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Phone"
                 style={{ color: "#343A40" }}
               />
@@ -140,7 +140,7 @@ const Register = () => {
                 required
                 value={passwordHash}
                 onChange={onChange}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 style={{ color: "#343A40" }}
               />
