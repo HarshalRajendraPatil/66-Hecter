@@ -11,6 +11,7 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import comparisonRoutes from "./routes/comparisonRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import checkIsLoggedInForFrontend from "./service/checkIsLoggedInForFrontend.js";
 import dotenv from "dotenv";
 
 const app = express();
@@ -29,6 +30,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/comparison", comparisonRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/checkForLogin", checkIsLoggedInForFrontend);
 
 app.use(errorHandler);
 

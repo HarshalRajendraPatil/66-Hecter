@@ -7,6 +7,8 @@ import ResetPassword from "./pages/ResetPassword";
 import axios from "axios";
 import ForgotPassword from "./pages/ForgotPassword";
 import AppLayout from "./AppLayout";
+import About from "./pages/About";
+import Services from "./pages/Service";
 
 const App = () => {
   axios.defaults.withCredentials = true;
@@ -16,11 +18,13 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,28 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ForgotPassword = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-  });
+  const { register, handleSubmit } = useForm();
 
-  const { email } = formData;
-
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      const res = await axios.post("/auth/password-reset", formData);
-      toast.success(res.data.message);
+      const res = await axios.post("/auth/password-reset", data);
+      toast.success(res.data?.message);
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err?.response?.data?.message);
     }
   };
 
@@ -31,19 +22,19 @@ const ForgotPassword = () => {
       className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
-      <ToastContainer
-        className="toast-position"
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className="max-w-md w-full space-y-8">
+        <ToastContainer
+          position="top-center"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div>
           <h2
             className="mt-6 text-center text-3xl font-extrabold text-gray-900"
@@ -52,7 +43,7 @@ const ForgotPassword = () => {
             Enter your registerd Email
           </h2>
         </div>
-        <form className="mt-8 space-y-3" onSubmit={onSubmit}>
+        <form className="mt-8 space-y-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="shadow-sm -space-y-px flex flex-col gap-2">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -60,12 +51,8 @@ const ForgotPassword = () => {
               </label>
               <input
                 id="email"
-                name="email"
                 type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={onChange}
+                {...register("email")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 style={{ color: "#343A40" }}

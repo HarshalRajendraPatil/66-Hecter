@@ -24,7 +24,7 @@ router.post("/login", login);
 router.post("/password-reset", forgotPassword);
 
 // Route for POST request on "/reset-password" link
-router.post("/password-reset/:token", isLoggedIn, resetPassword);
+router.post("/password-reset/:token", resetPassword);
 
 // Route for GET request on "/logout" link
 router.post("/logout", logout);

@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { clearUser } from "../redux/userSlice";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const state = useSelector((state) => state.user);
 
@@ -10,9 +15,17 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const logout = async () => {
+    try {
+      await axios.post("/auth/logout");
+      dispatch(clearUser());
+      toast.success("Logout successful.");
+    } catch (error) {}
+  };
+
   return (
     <header
-      className="bg-navyBlue text-darkGray shadow-md p-4 relative"
+      className="bg-navyBlue text-darkGray shadow-md py-4 px-8 relative"
       style={{ backgroundColor: "#001F3F", color: "#343A40" }}
     >
       <div className="containers flex justify-between items-center">
@@ -57,7 +70,7 @@ const Header = () => {
         </div>
 
         <div
-          className={`lg:flex lg:flex-row lg:top-3 lg:right-5 lg:p-0 z-10 lg:gap-[10rem] ${
+          className={`lg:flex lg:flex-row lg:top-3 lg:right-5 lg:p-0 z-10 ${
             isMenuOpen
               ? "flex flex-col absolute top-[3rem] bg-navyBlue right-0 translate-x-0 gap-5 p-4"
               : "hidden"
@@ -87,42 +100,73 @@ const Header = () => {
               About
             </Link>
             <Link
-              to="/contact"
+              to="/services"
               className="block lg:inline-block hover:text-gold px-2 py-1 lg:px-4"
               style={{ color: "#6C757D", hover: { color: "#FFC107" } }}
             >
-              Contact
+              Services
             </Link>
           </nav>
           {/* User Actions */}
-          <div
-            className={`lg:flex lg:space-x-4 ${
-              isMenuOpen ? "block" : "hidden"
-            } w-full lg:w-auto`}
-          >
-            <Link
-              to="/login"
-              className="block lg:inline-block bg-gold text-navyBlue px-4 py-2 rounded hover:bg-darkGold mb-2 lg:mb-0"
-              style={{
-                backgroundColor: "#FFC107",
-                color: "#001F3F",
-                hover: { backgroundColor: "#E0A800" },
-              }}
+          {!state.isLoggedIn ? (
+            <div
+              className={`lg:flex lg:space-x-4 ${
+                isMenuOpen ? "block" : "hidden"
+              } w-full lg:w-auto`}
             >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="block lg:inline-block bg-gold text-navyBlue px-4 py-2 rounded hover:bg-darkGold"
-              style={{
-                backgroundColor: "#FFC107",
-                color: "#001F3F",
-                hover: { backgroundColor: "#E0A800" },
-              }}
-            >
-              Register
-            </Link>
-          </div>
+              <Link
+                to="/login"
+                className="block lg:inline-block bg-gold text-navyBlue px-4 py-2 rounded hover:bg-darkGold mb-2 lg:mb-0"
+                style={{
+                  backgroundColor: "#FFC107",
+                  color: "#001F3F",
+                  hover: { backgroundColor: "#E0A800" },
+                }}
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="block lg:inline-block bg-gold text-navyBlue px-4 py-2 rounded hover:bg-darkGold"
+                style={{
+                  backgroundColor: "#FFC107",
+                  color: "#001F3F",
+                  hover: { backgroundColor: "#E0A800" },
+                }}
+              >
+                Register
+              </Link>
+            </div>
+          ) : (
+            <>
+              <>
+                <p>
+                  Welcome,{" "}
+                  <span className="text-white font-bold">
+                    {state.userInfo.name}
+                  </span>
+                </p>
+                <Link>
+                  <img
+                    src="./users.png"
+                    alt="user"
+                    className="w-[3rem] h-[2.5rem]"
+                  />
+                </Link>
+              </>
+              <button
+                onClick={logout}
+                className="block md:inline-block bg-gold text-navyBlue px-4 py-2 rounded hover:bg-darkGold"
+                style={{
+                  backgroundColor: "#FFC107",
+                  color: "#001F3F",
+                  hover: { backgroundColor: "#E0A800" },
+                }}
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

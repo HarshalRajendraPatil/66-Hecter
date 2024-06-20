@@ -1,34 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    passwordHash: "",
-  });
 
-  const { name, email, passwordHash, address, phone } = formData;
-
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      await axios.post("/auth/register", formData);
-      toast.success("Registration successful!");
+      await axios.post("/auth/register", data);
       navigate("/");
+      toast.success("Registration successful.");
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err?.response?.data?.message);
     }
   };
 
@@ -37,19 +24,19 @@ const Register = () => {
       className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
-      <ToastContainer
-        className="toast-position"
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className="max-w-md w-full space-y-6">
+        <ToastContainer
+          position="top-center"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div>
           <h2
             className="mt-6 text-center text-3xl font-extrabold text-gray-900"
@@ -58,7 +45,7 @@ const Register = () => {
             Create your account
           </h2>
         </div>
-        <form className="mt-8 space-y-3" onSubmit={onSubmit}>
+        <form className="mt-8 space-y-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="shadow-sm -space-y-px flex flex-col gap-2">
             <div>
               <label htmlFor="name" className="sr-only">
@@ -66,12 +53,8 @@ const Register = () => {
               </label>
               <input
                 id="name"
-                name="name"
                 type="text"
-                autoComplete="name"
-                required
-                value={name}
-                onChange={onChange}
+                {...register("name")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Name"
                 style={{ color: "#343A40" }}
@@ -83,12 +66,8 @@ const Register = () => {
               </label>
               <input
                 id="email"
-                name="email"
                 type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={onChange}
+                {...register("email")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 style={{ color: "#343A40" }}
@@ -100,12 +79,8 @@ const Register = () => {
               </label>
               <input
                 id="address"
-                name="address"
                 type="address"
-                autoComplete="address"
-                required
-                value={address}
-                onChange={onChange}
+                {...register("address")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Address"
                 style={{ color: "#343A40" }}
@@ -117,29 +92,21 @@ const Register = () => {
               </label>
               <input
                 id="phone"
-                name="phone"
                 type="phone"
-                autoComplete="phone"
-                required
-                value={phone}
-                onChange={onChange}
+                {...register("phone")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Phone"
                 style={{ color: "#343A40" }}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="passwordHash" className="sr-only">
                 Password
               </label>
               <input
-                id="password"
-                name="passwordHash"
+                id="passwordHash"
                 type="password"
-                autoComplete="current-password"
-                required
-                value={passwordHash}
-                onChange={onChange}
+                {...register("passwordHash")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 style={{ color: "#343A40" }}

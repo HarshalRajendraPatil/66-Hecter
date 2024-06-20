@@ -1,34 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = () => {
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    passwordHash: "",
-  });
   const param = useParams();
 
-  const { passwordHash } = formData;
-
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      const res = await axios.post(
-        `/auth/password-reset/${param.token}`,
-        formData
-      );
-      toast.success(res.data.message);
+      const res = await axios.post(`/auth/password-reset/${param.token}`, data);
       navigate("/login");
+      toast.success(res.data.message);
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err?.response?.data?.message);
     }
   };
 
@@ -37,18 +25,6 @@ const ResetPassword = () => {
       className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
-      <ToastContainer
-        className="toast-position"
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2
@@ -58,20 +34,16 @@ const ResetPassword = () => {
             Enter your new password
           </h2>
         </div>
-        <form className="mt-8 space-y-3" onSubmit={onSubmit}>
+        <form className="mt-8 space-y-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="shadow-sm -space-y-px flex flex-col gap-2">
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="passwordHash" className="sr-only">
                 Password
               </label>
               <input
-                id="password"
-                name="passwordHash"
+                id="passwordHash"
                 type="password"
-                autoComplete="current-password"
-                required
-                value={passwordHash}
-                onChange={onChange}
+                {...register("passwordHash")}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 style={{ color: "#343A40" }}

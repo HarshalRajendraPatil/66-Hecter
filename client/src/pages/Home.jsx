@@ -1,16 +1,44 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { setIsLoggedIn } from "../redux/userSlice";
 
 const Home = () => {
   const navigate = useNavigate();
-  const state = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!state.userInfo) navigate("/login");
+    const fetchForLogin = async () => {
+      try {
+        await axios.get("/checkForLogin");
+        dispatch(setIsLoggedIn());
+      } catch (error) {
+        toast.error(error?.response?.data?.message);
+      }
+    };
+    fetchForLogin();
   }, []);
 
-  return <div>Home</div>;
+  return (
+    <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      Home
+    </div>
+  );
 };
 
 export default Home;

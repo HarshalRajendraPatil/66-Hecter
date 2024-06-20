@@ -92,19 +92,17 @@ const resetPassword = catchAsync(async (req, res, next) => {
   const newPass = req.body.passwordHash;
   const token = req.params.token;
 
+  // Checking if the password is entered or not
+  if (!newPass)
+    return next(new CustomError("Please enter the new password", 400));
+
   // Checking for the token
   if (!token) return next(new CustomError("Invalid token. Try again.", 400));
 
   const user = await User.findById(token);
 
-  console.log(newPass, token, user);
-
   if (!(token == user._id))
     return next(new CustomError("Invalid token. Try again", 400));
-
-  // Checking if the password is entered or not
-  if (!newPass)
-    return next(new CustomError("Please enter the new password", 400));
 
   // Hashing the password
   const hashedPass = await bcrypt.hash(newPass, 10);
