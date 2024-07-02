@@ -13,25 +13,27 @@ import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
+// router.use(isLoggedIn);
+
 // Get all reviews
-router.get("/", isLoggedIn, adminMiddleware, getAllReviews);
+router.get("/", adminMiddleware, getAllReviews);
 
 // Get a single review
-router.get("/:reviewId", isLoggedIn, getReview);
+router.get("/:reviewId", getReview);
 
 // Add a review to the property
-router.post("/properties/:propertyId", isLoggedIn, addReview);
+router.post("/properties/:propertyId", addReview);
 
 // Get all reviews for a property.
-router.get("/properties/:propertyId", isLoggedIn, getAllPropertyReviews);
+router.get("/properties/:propertyId", getAllPropertyReviews);
 
 // Get all reviews by a user
-router.get("/users", isLoggedIn, getAllReviewsByUser);
+router.get("/users", getAllReviewsByUser);
 
 // Update a review.
-router.put("/:reviewId", isLoggedIn, updateReview);
+router.put("/:reviewId", updateReview);
 
 // Delete a review.
-router.delete("/:reviewId", isLoggedIn, deleteReview);
+router.delete("/:reviewId", deleteReview);
 
 export default router;

@@ -13,6 +13,7 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import checkIsLoggedInForFrontend from "./service/checkIsLoggedInForFrontend.js";
 import dotenv from "dotenv";
+import analyticRoutes from "./routes/propertyAnalyticsRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/comparison", comparisonRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/checkForLogin", checkIsLoggedInForFrontend);
+app.use("/api/analytics", analyticRoutes);
 
 app.use(errorHandler);
 

@@ -22,6 +22,10 @@ const propertySchema = new Schema(
       enum: ["Available", "Sold", "Pending"],
       default: "Available",
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
     transactionType: {
       type: String,
       enum: ["Buy", "Rent"],

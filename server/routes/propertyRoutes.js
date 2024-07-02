@@ -10,6 +10,7 @@ import {
   uploadPropertyMedia,
   deletePropertyMedia,
   addAndRemovePropertyFromFavorites,
+  getSimilarProperties,
 } from "../controllers/propertyController.js";
 
 const router = express.Router();
@@ -40,5 +41,8 @@ router.delete("/:id/media/:mediaId", isLoggedIn, deletePropertyMedia);
 
 // Add and Remove property from favorites
 router.post("/:id/favorites", isLoggedIn, addAndRemovePropertyFromFavorites);
+
+// Get the similar properties
+router.get("/similar/:id", getSimilarProperties);
 
 export default router;

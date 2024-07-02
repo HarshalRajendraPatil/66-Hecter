@@ -4,7 +4,7 @@ const About = () => {
   return (
     <div className="bg-lightBeige text-darkGray">
       <div className="container mx-auto p-6">
-        <section className="hero bg-navyBlue text-white py-8 px-6 text-center mb-10">
+        <section className="bg-navyBlue text-white py-8 px-6 text-center mb-10 mt-[4rem] ">
           <h1 className="text-4xl font-bold mb-4">About Us</h1>
           <p className="text-lg">
             Discover our story and meet the team behind our success.
@@ -24,7 +24,7 @@ const About = () => {
               <img
                 src="./Team.jpeg"
                 alt="Our Team"
-                className="w-full rounded-lg shadow-lg mb-4"
+                className="w-full rounded-lg shadow-lg mb-4 h-[20rem] object-cover"
               />
               <h3 className="text-2xl font-bold">Our Team</h3>
               <p className="mt-2">
@@ -36,7 +36,7 @@ const About = () => {
               <img
                 src="./mission.jpeg"
                 alt="Our Mission"
-                className="w-full rounded-lg shadow-lg mb-4"
+                className="w-full rounded-lg shadow-lg mb-4 h-[20rem] object-cover"
               />
               <h3 className="text-2xl font-bold">Our Mission</h3>
               <p className="mt-2">
@@ -57,7 +57,7 @@ const About = () => {
           </div>
           <div className="flex flex-wrap justify-center">
             <div className="w-full md:w-1/2 lg:w-1/4 p-4">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white min-h-[15rem] p-6 rounded-lg shadow-lg">
                 <h3 className="text-2xl font-bold mb-2">Integrity</h3>
                 <p className="text-lg">
                   We uphold the highest standards of integrity in all our
@@ -66,7 +66,7 @@ const About = () => {
               </div>
             </div>
             <div className="w-full md:w-1/2 lg:w-1/4 p-4">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white min-h-[15rem] p-6 rounded-lg shadow-lg">
                 <h3 className="text-2xl font-bold mb-2">Excellence</h3>
                 <p className="text-lg">
                   We strive for excellence in everything we do.
@@ -74,7 +74,7 @@ const About = () => {
               </div>
             </div>
             <div className="w-full md:w-1/2 lg:w-1/4 p-4">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white min-h-[15rem] p-6 rounded-lg shadow-lg">
                 <h3 className="text-2xl font-bold mb-2">
                   Customer Satisfaction
                 </h3>

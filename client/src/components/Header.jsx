@@ -70,7 +70,7 @@ const Header = () => {
         </div>
 
         <div
-          className={`lg:flex lg:flex-row lg:top-3 lg:right-5 lg:p-0 z-10 ${
+          className={`lg:flex lg:flex-row lg:top-3 lg:right-5 gap-1 md:gap-7 lg:p-0 z-10 ${
             isMenuOpen
               ? "flex flex-col absolute top-[3rem] bg-navyBlue right-0 translate-x-0 gap-5 p-4"
               : "hidden"
@@ -140,12 +140,6 @@ const Header = () => {
           ) : (
             <>
               <>
-                <p>
-                  Welcome,{" "}
-                  <span className="text-white font-bold">
-                    {state.userInfo.name}
-                  </span>
-                </p>
                 <Link>
                   <img
                     src="./users.png"
@@ -153,6 +147,12 @@ const Header = () => {
                     className="w-[3rem] h-[2.5rem]"
                   />
                 </Link>
+                <p>
+                  Welcome,{" "}
+                  <span className="text-white font-bold">
+                    {state.userInfo.name}
+                  </span>
+                </p>
               </>
               <button
                 onClick={logout}

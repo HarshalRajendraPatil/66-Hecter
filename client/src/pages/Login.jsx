@@ -10,15 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit, formState } = useForm();
-  const err = formState.errors;
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("/auth/login", data);
       dispatch(setUser(res.data.user));
-      navigate("/");
       toast.success("Login successful.");
+      navigate("/");
     } catch (err) {
       toast.error(err?.response?.data?.message);
     }
@@ -29,19 +28,19 @@ const Login = () => {
       className="min-h-[70vh] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: "#F8F9FA" }}
     >
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="max-w-md w-full space-y-6">
-        <ToastContainer
-          position="top-center"
-          autoClose={2500}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
         <div>
           <h2
             className="text-center text-3xl font-extrabold text-gray-900"

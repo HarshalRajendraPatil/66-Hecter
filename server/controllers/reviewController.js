@@ -49,7 +49,9 @@ const addReview = catchAsync(async (req, res, next) => {
 });
 
 const getAllReviews = catchAsync(async (req, res, next) => {
-  const reviews = await Review.find().populate("user property");
+  const reviews = await Review.find()
+    .populate("user property")
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
@@ -81,7 +83,9 @@ const getAllPropertyReviews = catchAsync(async (req, res, next) => {
 
   const reviews = await Review.find({
     property: req.params.propertyId,
-  }).populate("user", "name");
+  })
+    .populate("user", "name")
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
@@ -94,10 +98,9 @@ const getAllPropertyReviews = catchAsync(async (req, res, next) => {
 
 // Get all reviews by a user
 const getAllReviewsByUser = catchAsync(async (req, res, next) => {
-  const reviews = await Review.find({ user: req.user._id }).populate(
-    "property",
-    "title"
-  );
+  const reviews = await Review.find({ user: req.user._id })
+    .populate("property", "title")
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",

@@ -48,11 +48,15 @@ const getAllProperties = catchAsync(async (req, res, next) => {
 
 // Get a property by ID
 const getPropertyById = catchAsync(async (req, res, next) => {
-  const property = await Property.findById(req.params.id);
+  const property = await Property.findById(req.params.id).populate(
+    "reviews reviews.user"
+  );
 
   if (!property) {
     return next(new CustomError("No property found with that ID", 404));
   }
+  property.views += 1;
+  await property.save();
 
   res.status(200).json({
     status: "success",
@@ -259,6 +263,26 @@ const addAndRemovePropertyFromFavorites = catchAsync(async (req, res, next) => {
   });
 });
 
+const getSimilarProperties = catchAsync(async (req, res, next) => {
+  const propertyId = req.params.id;
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    return res.status(404).json({ message: "Property not found" });
+  }
+
+  const similarProperties = await Property.find({
+    _id: { $ne: propertyId },
+    type: property.type,
+    "pricing.price": {
+      $gte: property.pricing.price * 0.8,
+      $lte: property.pricing.price * 1.2,
+    },
+  }).limit(10);
+
+  res.status(200).json({ status: "success", data: similarProperties });
+});
+
 export {
   createProperty,
   getAllProperties,
@@ -269,4 +293,5 @@ export {
   uploadPropertyMedia,
   deletePropertyMedia,
   addAndRemovePropertyFromFavorites,
+  getSimilarProperties,
 };
