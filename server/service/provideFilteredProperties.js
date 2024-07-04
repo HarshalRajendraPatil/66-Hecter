@@ -41,21 +41,6 @@ const provideFilteredProperties = catchAsync(async (req, res) => {
   if (filters.bathrooms) {
     query["features.bathrooms"] = { $gte: filters.bathrooms };
   }
-  if (filters.maxLivingArea) {
-    if (!query["features.livingArea"]) {
-      query["features.livingArea"] = {};
-    }
-    query["features.livingArea"].$lte = filters.maxLivingArea;
-  }
-  if (filters.maxLotSize) {
-    if (!query["features.lotSize"]) {
-      query["features.lotSize"] = {};
-    }
-    query["features.lotSize"].$lte = filters.maxLotSize;
-  }
-  if (filters.yearBuilt) {
-    query["features.yearBuilt"] = filters.yearBuilt;
-  }
   if (filters.floors) {
     query["features.floors"] = filters.floors;
   }
@@ -86,26 +71,8 @@ const provideFilteredProperties = catchAsync(async (req, res) => {
   if (filters.fireplace !== undefined) {
     query["interior.fireplace"] = filters.fireplace;
   }
-  if (filters.kitchen) {
-    query["interior.kitchen"] = filters.kitchen;
-  }
-  if (filters.heating) {
-    query["interior.heating"] = filters.heating;
-  }
-  if (filters.cooling) {
-    query["interior.cooling"] = filters.cooling;
-  }
   if (filters.furnishing) {
     query["interior.furnishing"] = filters.furnishing;
-  }
-  if (filters.amenities && filters.amenities.length > 0) {
-    query["additionalDetails.amenities"] = { $in: filters.amenities };
-  }
-  if (filters.maxHoaFees) {
-    if (!query["additionalDetails.hoaFees"]) {
-      query["additionalDetails.hoaFees"] = {};
-    }
-    query["additionalDetails.hoaFees"].$lte = filters.maxHoaFees;
   }
   if (filters.transactionType) {
     query.transactionType = filters.transactionType;
@@ -183,4 +150,37 @@ export default provideFilteredProperties;
 // }
 // if (filters.minLotSize) {
 //   query["features.lotSize"] = { $gte: filters.minLotSize };
+// }
+// if (filters.maxLivingArea) {
+//   if (!query["features.livingArea"]) {
+//     query["features.livingArea"] = {};
+//   }
+//   query["features.livingArea"].$lte = filters.maxLivingArea;
+// }
+// if (filters.maxLotSize) {
+//   if (!query["features.lotSize"]) {
+//     query["features.lotSize"] = {};
+//   }
+//   query["features.lotSize"].$lte = filters.maxLotSize;
+// }
+// if (filters.yearBuilt) {
+//   query["features.yearBuilt"] = filters.yearBuilt;
+// }
+// if (filters.kitchen) {
+//   query["interior.kitchen"] = filters.kitchen;
+// }
+// if (filters.heating) {
+//   query["interior.heating"] = filters.heating;
+// }
+// if (filters.cooling) {
+//   query["interior.cooling"] = filters.cooling;
+// }
+// if (filters.amenities && filters.amenities.length > 0) {
+//   query["additionalDetails.amenities"] = { $in: filters.amenities };
+// }
+// if (filters.maxHoaFees) {
+//   if (!query["additionalDetails.hoaFees"]) {
+//     query["additionalDetails.hoaFees"] = {};
+//   }
+//   query["additionalDetails.hoaFees"].$lte = filters.maxHoaFees;
 // }

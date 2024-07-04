@@ -25,13 +25,18 @@ import { FaBusAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import useFetch from "../hooks/useFetch";
 import SkeletonColor from "../components/Skeleton";
+import HorizontalScrollBar from "../components/HorizontalScrollBar";
+import { CircularProgress } from "@mui/material";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const PropertyDetails = () => {
   const { propertyId } = useParams();
   const [property, setProperty] = useState(null);
-  const [reviews, setReviews] = useState([]);
   const { data: similarPropertyData, loading: similarPropertyLoading } =
     useFetch(`/properties/similar/${propertyId}`);
+  const { data: reviews, loading: reviewsLoading } = useFetch(
+    `/reviews/properties/${propertyId}`
+  );
 
   useEffect(() => {
     // Fetch property data
@@ -43,20 +48,11 @@ const PropertyDetails = () => {
         console.error("Error fetching the property details", error);
       }
     };
-    const fetchReviews = async () => {
-      try {
-        const response = await axios.get(`/reviews/properties/${propertyId}`);
-        setReviews(response.data.data.reviews);
-      } catch (error) {
-        console.error("Error fetching the property details", error);
-      }
-    };
     fetchProperty();
-    fetchReviews();
   }, [propertyId]);
 
   if (!property) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   const {
@@ -338,59 +334,63 @@ const PropertyDetails = () => {
           </div>
         </div>
 
-        <div className="bg-light-beige text-dark-gray p-4 md:p-8">
-          <h2 className="text-3xl font-bold font-navy  mb-1">
-            <span className="text-gold">Reviews</span> ({reviews.length})
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reviews.length > 0 ? (
-              reviews.map(
-                (review, idx) =>
-                  idx <= 2 && (
-                    <div
-                      key={idx}
-                      className="bg-white p-6 border border-gray-200 rounded-lg shadow-md"
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="text-xl font-bold text-gold">
-                          {review.user.name}
+        {reviewsLoading ? (
+          <CircularProgress />
+        ) : (
+          <div className="bg-light-beige text-dark-gray py-4 md:py-8">
+            <h2 className="text-3xl font-bold font-navy mb-1">
+              <span className="text-gold">Reviews</span> ({reviews.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reviews.length > 0 ? (
+                reviews.map(
+                  (review, idx) =>
+                    idx <= 2 && (
+                      <div
+                        key={idx}
+                        className="bg-white p-6 border border-gray-200 rounded-lg shadow-md"
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="text-xl font-bold text-gold">
+                            {review.user.name}
+                          </div>
+                          <div className="flex items-center">
+                            {[...Array(5)].map((star, i) => (
+                              <FaStar
+                                key={i}
+                                className={`inline mr-1 ${
+                                  i < review.rating
+                                    ? "text-gold"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          {[...Array(5)].map((star, i) => (
-                            <FaStar
-                              key={i}
-                              className={`inline mr-1 ${
-                                i < review.rating
-                                  ? "text-gold"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                        </div>
+                        <p className="text-lg">{review.comment}</p>
+                        <p className="text-sm text-gray mt-4">
+                          Reviewed on:{" "}
+                          {new Date(review.createdAt).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-lg">{review.comment}</p>
-                      <p className="text-sm text-gray mt-4">
-                        Reviewed on:{" "}
-                        {new Date(review.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  )
-              )
-            ) : (
-              <p>No reviews yet.</p>
+                    )
+                )
+              ) : (
+                <p>No reviews yet.</p>
+              )}
+            </div>
+            {reviews.length > 3 && (
+              <div className="mt-6">
+                <Link
+                  to={`/properties/${property._id}/reviews`}
+                  className="inline-block bg-gold text-white py-2 px-4 rounded hover:bg-dark-gold"
+                >
+                  See All Reviews
+                </Link>
+              </div>
             )}
           </div>
-          {reviews.length > 3 && (
-            <div className="mt-6">
-              <Link
-                to={`/properties/${property._id}/reviews`}
-                className="inline-block bg-gold text-white py-2 px-4 rounded hover:bg-dark-gold"
-              >
-                See All Reviews
-              </Link>
-            </div>
-          )}
-        </div>
+        )}
 
         <div className="mt-8 text-center">
           <button className="bg-gold text-dark-gray px-6 py-3 rounded-lg hover:bg-dark-gray hover:text-light-beige transition duration-300">
