@@ -28,6 +28,7 @@ import SkeletonColor from "../components/Skeleton";
 import HorizontalScrollBar from "../components/HorizontalScrollBar";
 import { CircularProgress } from "@mui/material";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ReviewCard from "../components/ReviewCard";
 
 const PropertyDetails = () => {
   const { propertyId } = useParams();
@@ -345,35 +346,7 @@ const PropertyDetails = () => {
               {reviews.length > 0 ? (
                 reviews.map(
                   (review, idx) =>
-                    idx <= 2 && (
-                      <div
-                        key={idx}
-                        className="bg-white p-6 border border-gray-200 rounded-lg shadow-md"
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="text-xl font-bold text-gold">
-                            {review.user.name}
-                          </div>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((star, i) => (
-                              <FaStar
-                                key={i}
-                                className={`inline mr-1 ${
-                                  i < review.rating
-                                    ? "text-gold"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-lg">{review.comment}</p>
-                        <p className="text-sm text-gray mt-4">
-                          Reviewed on:{" "}
-                          {new Date(review.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    )
+                    idx <= 2 && <ReviewCard review={review} key={idx} />
                 )
               ) : (
                 <p>No reviews yet.</p>
@@ -392,7 +365,7 @@ const PropertyDetails = () => {
           </div>
         )}
 
-        <div className="mt-8 text-center">
+        <div className="my-8 text-center">
           <button className="bg-gold text-dark-gray px-6 py-3 rounded-lg hover:bg-dark-gray hover:text-light-beige transition duration-300">
             Book Property
           </button>

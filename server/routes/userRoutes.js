@@ -6,16 +6,24 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  getFavorites,
+  updateProfilePic,
 } from "../controllers/userController.js";
 
 const router = express.Router();
 
-router.get("/", isLoggedIn, adminMiddleware, getAllUsers);
+router.use(isLoggedIn);
 
-router.get("/:userId", isLoggedIn, getUser);
+router.get("/", adminMiddleware, getAllUsers);
 
-router.put("/:userId", isLoggedIn, updateUser);
+router.get("/favorites", getFavorites);
 
-router.delete("/:userId", isLoggedIn, deleteUser);
+router.get("/:userId", getUser);
+
+router.put("/", updateUser);
+
+router.put("/img", updateProfilePic);
+
+router.delete("/", deleteUser);
 
 export default router;

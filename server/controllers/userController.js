@@ -1,5 +1,6 @@
 import User from "../models/UserModel.js";
 import catchAsync from "../utils/catchAsync.js";
+import cloudinary from "../service/cloudinary.js";
 
 const getAllUsers = catchAsync(async (req, res, next) => {
   const page = req.query.page || 1;
@@ -21,7 +22,9 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 const getUser = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.userId).select("-passwordHash");
+  const user = await User.findById(req.params.userId)
+    .select("-passwordHash")
+    .populate("reviews listings");
 
   res.status(200).json({
     status: "success",
@@ -52,6 +55,29 @@ const updateUser = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateProfilePic = catchAsync(async (req, res) => {
+  if (!req.files) return res.status(400).json({ error: "No file uploaded" });
+
+  console.log(req.files.profilePhoto.tempFilePath);
+
+  const result = await cloudinary.uploader.upload(
+    req.files.profilePhoto.tempFilePath,
+    {
+      resource_type: "auto",
+    }
+  );
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      profileImg: { url: result.secure_url, public_id: result.public_id },
+    },
+    { new: true }
+  );
+
+  res.json({ message: "Profile photo updated successfully", data: user });
+});
+
 const deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.userId);
 
@@ -71,4 +97,22 @@ const deleteUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export { getAllUsers, getUser, updateUser, deleteUser };
+const getFavorites = catchAsync(async (req, res, next) => {
+  const favProperties = await User.findById(req.user._id).populate("favorites");
+
+  if (!favProperties) return next(new CustomError("Please Login", 400));
+
+  res.status(201).json({
+    status: "success",
+    data: favProperties.favorites,
+  });
+});
+
+export {
+  getAllUsers,
+  getUser,
+  updateUser,
+  updateProfilePic,
+  deleteUser,
+  getFavorites,
+};

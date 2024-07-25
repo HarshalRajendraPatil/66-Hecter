@@ -10,12 +10,15 @@ const HeroSection = () => {
   const [loading, setLoading] = useState(false);
 
   const handleNext = () => {
-    if (currentImage <= bannerProperties.length - 1)
-      setCurrentImage((e) => e + 1);
+    if (currentImage < bannerProperties.length - 1) {
+      setCurrentImage((prev) => prev + 1);
+    }
   };
 
   const handlePrevious = () => {
-    if (currentImage > 0) setCurrentImage((e) => e - 1);
+    if (currentImage > 0) {
+      setCurrentImage((prev) => prev - 1);
+    }
   };
 
   useEffect(() => {
@@ -34,8 +37,11 @@ const HeroSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (currentImage >= bannerProperties.length - 1) setCurrentImage(0);
-      handleNext();
+      if (currentImage >= bannerProperties.length - 1) {
+        setCurrentImage(0);
+      } else {
+        handleNext();
+      }
     }, 5000);
 
     return () => clearInterval(interval);
@@ -43,7 +49,7 @@ const HeroSection = () => {
 
   return (
     <section className="w-full h-full z-10">
-      <div className="flex min-h-full md:max-h-[80vh] overflow-hidden">
+      <div className="flex min-h-full md:max-h-[70vh] overflow-hidden">
         {bannerProperties.map((data, index) => {
           return loading ? (
             <Skeleton
@@ -55,7 +61,7 @@ const HeroSection = () => {
             />
           ) : (
             <div
-              className="min-w-full min-h-[700px] lg:min-h-full overflow-hidden relative group"
+              className="min-w-full min-h-[500px] md:min-h-[700px] lg:min-h-full overflow-hidden relative group"
               style={{
                 transform: `translateX(-${currentImage * 100}%)`,
                 transition: "all .7s ease-in-out",
@@ -83,9 +89,9 @@ const HeroSection = () => {
                 </button>
               </div>
               <div className="absolute top-0 w-full h-full bg-gradient-to-t from-[#F8F9FA] to-transparent"></div>
-              <div className="container mx-auto">
-                <div className="absolute bottom-0 max-w-md px-3">
-                  <h2 className="font-bold text-xl md:text-2xl lg:text-4xl text-black drop-shadow-2xl">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="absolute bottom-0 max-w-lg px-3 py-4 backdrop-blur-sm rounded-lg">
+                  <h2 className="font-bold text-xl md:text-2xl lg:text-3xl text-black drop-shadow-2xl">
                     {data.title}
                   </h2>
                   <p className="text-ellipsis line-clamp-3 my-2">

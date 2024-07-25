@@ -13,7 +13,7 @@ import adminMiddleware from "../middlewares/adminMiddleware.js";
 
 const router = express.Router();
 
-// router.use(isLoggedIn);
+router.use(isLoggedIn);
 
 // Get all reviews
 router.get("/", adminMiddleware, getAllReviews);

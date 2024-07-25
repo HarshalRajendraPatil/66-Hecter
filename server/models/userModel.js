@@ -36,7 +36,7 @@ const userSchema = new Schema(
     listings: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Listing",
+        ref: "Property",
       },
     ],
     transactions: [
@@ -75,6 +75,10 @@ const userSchema = new Schema(
         ref: "Booking",
       },
     ],
+    profileImg: {
+      url: String,
+      public_id: String,
+    },
   },
   {
     timestamps: true,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
@@ -9,7 +9,6 @@ const AllReviewsPage = () => {
   const { data: reviews, loading: reviewsLoading } = useFetch(
     `/reviews/properties/${propertyId}`
   );
-  const totalReviews = reviews.length;
   const ratingCounts = [5, 4, 3, 2, 1].map((star) => ({
     star,
     count: reviews.filter((review) => review.rating === star).length,

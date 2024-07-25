@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import CheckBoxForFilters from "../components/CheckBoxForFilters";
 import InputsForFilters from "../components/InputsForFilters";
+import PropertyCard from "../components/PropertyCard";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SearchProperties = () => {
   const [filters, setFilters] = useState({});
   const [properties, setProperties] = useState([]);
   const [city, setCity] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [status, setStatus] = useState("idle");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,13 +33,17 @@ const SearchProperties = () => {
   };
 
   const handleSearch = async () => {
+    setStatus("loading");
     try {
       if (city) filters.city = city;
       else filters.city = "";
       const response = await axios.get("/properties", { params: filters });
       setProperties(response.data.data.properties);
+      setStatus("succeeded");
     } catch (error) {
+      setStatus("failed");
       console.error("Error fetching properties:", error);
+      toast.error("Failed to load the properties.");
     }
   };
 
@@ -49,6 +57,7 @@ const SearchProperties = () => {
 
   return (
     <div className="flex flex-col md:flex-row bg-light-beige text-dark-gray mt-14 max-h-fit">
+      <ToastContainer />
       <button
         className="md:hidden mt-4 p-2 max-w-fit mx-auto bg-gold text-dark-gray rounded"
         onClick={toggleSidebar}
@@ -243,29 +252,14 @@ const SearchProperties = () => {
           </div>
         </div>
         <h2 className="text-2xl font-bold text-gold mb-4">Search Results</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {status === "loading" ? (
+            <LoadingSpinner />
+          ) : status === "failed" ? (
+            <p>Could not load the data !!!</p>
+          ) : properties.length > 0 ? (
             properties.map((property) => (
-              <Link
-                to={property._id}
-                key={property._id}
-                className="bg-white p-6 border border-gray-200 rounded-lg shadow-md"
-              >
-                <img
-                  src={`${property.media.images[0].url}`}
-                  alt="Property image"
-                  className="h-44"
-                />
-                <h3 className="text-xl font-bold text-gold mt-4">
-                  {property.title}
-                </h3>
-                <p className="text-md mt-2 line-clamp-3">
-                  {property.description}
-                </p>
-                <p className="text-md mt-2">
-                  Price: {property.pricing.price} {property.pricing.currency}
-                </p>
-              </Link>
+              <PropertyCard data={property} key={property._id} />
             ))
           ) : (
             <p>No properties found.</p>

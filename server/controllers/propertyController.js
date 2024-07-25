@@ -30,7 +30,7 @@ const createProperty = catchAsync(async (req, res, next) => {
     sendEmails(user.email, "New Property Added", message);
   });
 
-  req.user.listing.push(property._id);
+  req.user.listings.push(property._id);
   await req.user.save();
 
   res.status(201).json({
@@ -123,9 +123,9 @@ const deleteProperty = catchAsync(async (req, res, next) => {
   )
     return next(new CustomError("Permission denied!", 403));
 
-  await property.deleteOne();
+  req.user.listings.pull(property._id);
 
-  req.user.listing.pull(property._id);
+  await property.deleteOne();
   await req.user.save();
 
   res.status(204).json({
@@ -176,7 +176,6 @@ const uploadPropertyMedia = catchAsync(async (req, res, next) => {
   );
 
   const imageResults = await Promise.all(imagePromises);
-  console.log(imageResults);
 
   imageResults.forEach((result) => {
     property.media.images.push({
@@ -271,12 +270,17 @@ const getSimilarProperties = catchAsync(async (req, res, next) => {
     return res.status(404).json({ message: "Property not found" });
   }
 
+  let priceField = "pricing.price";
+  if (property.transactionType === "Rent") {
+    priceField = "pricing.rent";
+  }
+
   const similarProperties = await Property.find({
     _id: { $ne: propertyId },
     type: property.type,
-    "pricing.price": {
-      $gte: property.pricing.price * 0.8,
-      $lte: property.pricing.price * 1.2,
+    [priceField]: {
+      $gte: property.pricing[priceField.split(".").pop()] * 0.8,
+      $lte: property.pricing[priceField.split(".").pop()] * 1.2,
     },
   }).limit(10);
 

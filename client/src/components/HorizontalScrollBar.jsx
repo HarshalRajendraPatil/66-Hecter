@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import PropertyCard from "./PropertyCard";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
-// const HorizontalScrollBar = ({ data = [], heading, trending, media_type }) => {
 const HorizontalScrollBar = ({ data = [], heading }) => {
   const containerRef = useRef();
 
